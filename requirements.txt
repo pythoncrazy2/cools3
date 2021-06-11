@@ -3,4 +3,4 @@ asyncpraw
 pillow
 pandas
 opencv-python-headless
-google-trans-new
+async_google_trans_new
