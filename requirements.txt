@@ -1,0 +1,6 @@
+discord.py
+asyncpraw
+pillow
+pandas
+opencv-python-headless
+google-trans-new
