@@ -306,8 +306,7 @@ async def myLoop():
     print("gen memes")
     for element in nameofsubs:
         await gen_memes(element)
-    with open('image.png', 'rb') as image:
-        client.user.edit(avatar=image)
+
 myLoop.start()
 client.run(token)
 
