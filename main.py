@@ -1,6 +1,8 @@
 import pandas as pd
-data = pd.read_csv("copy.csv")
-cpdict = {col: list(data[col]) for col in data.columns}
+import csv
+cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+
+cpdict=cpdict2
 
 i=0
 listofnames=""
@@ -85,8 +87,35 @@ async def meme23(ctx,subname):
     await ctx.send(embed=embed)
     print(subname)
 
+from csv import writer
+def append_list_as_row(file_name, list_of_elem):
+    # Open file in append mode
+    with open(file_name, 'a+', newline='') as write_obj:
+        # Create a writer object from csv module
+        csv_writer = writer(write_obj)
+        # Add contents of list as last row in the csv file
+
+        csv_writer.writerow(list_of_elem)
+
+@client.command(name="add",help="Add's a copypasta")
+async def whoami2(ctx,titleofpasta,pasta) :
+    list2=[]
+    list2.append(titleofpasta)
+    list2.append(pasta)
+    append_list_as_row("copy.csv",list2)
+    cpdict = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
 
+
+    i=0
+    listofnames=""
+    for key, value in cpdict.items():
+        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
+
+        i+=1
+    cptitles=list(cpdict)
+    print(cptitles)
+    await ctx.send("Done :happy:")
 
 
 
@@ -141,6 +170,13 @@ async def on_message(message):
 
 @client.command(name= 'cptitle',help="Posts the titles of all the current customized saved copypasta's. Run by +cptitle")
 async def copypasta(ctx) :
+    listofnames=""
+    i=0
+    for key, value in cpdict.items():
+        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
+
+        i+=1
+    cptitles=list(cpdict)
     await ctx.send(listofnames)
 
 @client.command(name="amogus", help="Posts a random image related to the popular game Among us. Run by +amogus")

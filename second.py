@@ -1,7 +1,5 @@
-strs="hello"
-from google_trans_new import google_translator  
-g=google_translator()
+import pandas as pd
+import csv
+cpdict = planets = pd.read_csv("copy.csv", sep=',')
 
-a=g.translate(strs,"es")
-a=g.translate(a,"en")
-print(a)
+print(cpdict)
