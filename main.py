@@ -104,7 +104,7 @@ async def whoami2(ctx,titleofpasta,pasta) :
     list2.append(pasta)
     append_list_as_row("copy.csv",list2)
     cpdict = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
-
+    print(cpdict[titleofpasta])
 
 
     i=0
