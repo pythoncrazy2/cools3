@@ -98,13 +98,26 @@ def append_list_as_row(file_name, list_of_elem):
         csv_writer.writerow(list_of_elem)
 
 @client.command(name="add",help="Add's a copypasta")
-async def whoami2(ctx,titleofpasta,pasta) :
+async def add(ctx):
+    def check(msg):
+        return msg.author == ctx.author
+
+    await ctx.send("Title of the ebic copypasta to append? (Note: This is how you will summon it. Also pings don't work(I am preventing spam pinging))")
+
+    message = await client.wait_for("message", check=check)
+    titleofpasta = message.content
+    await ctx.send("Actual copypasta now:")
+
+    message = await client.wait_for("message", check=check)
+    pasta = message.content
+    pasta = pasta.replace(',', '')
+
     list2=[]
     list2.append(titleofpasta)
     list2.append(pasta)
     append_list_as_row("copy.csv",list2)
-    cpdict = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
-    print(cpdict[titleofpasta])
+    cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+    cpdict=cpdict2
 
 
     i=0
@@ -115,7 +128,8 @@ async def whoami2(ctx,titleofpasta,pasta) :
         i+=1
     cptitles=list(cpdict)
     print(cptitles)
-    await ctx.send("Done :happy:")
+
+    await ctx.send("Done :smiley:")
 
 
 
@@ -170,8 +184,8 @@ async def on_message(message):
 
 @client.command(name= 'cptitle',help="Posts the titles of all the current customized saved copypasta's. Run by +cptitle")
 async def copypasta(ctx) :
-    listofnames=""
     i=0
+    listofnames=""
     for key, value in cpdict.items():
         listofnames+=str(str(i+1)+" "+ str(key)+"\n")
 
@@ -212,7 +226,7 @@ async def cpy(ctx):
             await ctx.send(str)
 
 @client.command(name="owo", help="Makes a message appropriate for the owo. Run by +owo")
-async def cpy(ctx):
+async def cpy2(ctx):
     channel = ctx.channel
     messages = await channel.history(limit=2).flatten()
     i=0
@@ -260,7 +274,7 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
         frames = []
 
         for frame in ImageSequence.Iterator(im):
-    # Draw the text on the frame
+
             title_font = ImageFont.truetype('Fonts/One-Regular.ttf',50)
             d = ImageDraw.Draw(frame)
             d.text((10, 100),name_of_1st_text,(0,0,0),font=title_font)
@@ -270,7 +284,6 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
             frame.save(b, format="GIF")
             frame = Image.open(b)
 
-    # Then append the single frame image to a list of frames
             frames.append(frame)
 
             frames[0].save('out.gif', save_all=True, append_images=frames[1:])
