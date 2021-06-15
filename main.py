@@ -116,18 +116,8 @@ async def add(ctx):
     list2.append(titleofpasta)
     list2.append(pasta)
     append_list_as_row("copy.csv",list2)
-    cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
-    cpdict=cpdict2
-
-
-    i=0
-    listofnames=""
-    for key, value in cpdict.items():
-        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
-
-        i+=1
-    cptitles=list(cpdict)
-    print(cptitles)
+    cpdict = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+    
 
     await ctx.send("Done :smiley:")
 
