@@ -1,23 +1,29 @@
 
-import discord
-from discord.ext import commands
-from discord.ext import tasks
-import os
-import glob, random
-from PIL import Image, ImageDraw, ImageSequence,ImageFont
-client = commands.Bot(command_prefix="+")
-import async_google_trans_new as gt
 token = "ODUzODE1NTMwMDgzMDU3NjY0.YMa3rQ.1slIk_BuRjX0XwROW-rzvYQk9OA"
+import discord
+import discordslashcommands as dsc
+from discord.ext import commands
+import random
+import glob
+client = commands.Bot(command_prefix="+")
 
-@client.command()
-async def c(ctx):
-    def check(msg):
-        return msg.author == ctx.author
 
-    await ctx.send("Testing in progress")
+@client.event
+async def on_interaction(member, interaction):
+    interaction.call_on_message("+")  # we do anything here, but we translate to a classic message
 
-    message = await client.wait_for("message", check=check)
-    content = message.content
-    await ctx.send(content)
-    await ctx.send("Testing has finished")
+
+@client.command(name="amogus", help="Posts a random image related to the popular game Among us. Run by +amogus")
+async def amoguspasta(ctx):
+    file_path_type = ["./amogusimg/*.png", "./amogusimg/*.jpg"]
+    images = glob.glob(random.choice(file_path_type))
+    random_image = random.choice(images)
+    await ctx.send(file=discord.File(random_image))
+
+
+@client.event
+async def on_ready():
+    manager = dsc.Manager(client)  # DON'T FORGET THAT
+
+
 client.run(token)
