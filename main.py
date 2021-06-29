@@ -38,6 +38,7 @@ from discord.ext import tasks
 import os
 import glob, random
 from PIL import Image, ImageDraw, ImageSequence,ImageFont
+from textwrap import wrap
 client = commands.Bot(command_prefix="+")
 import async_google_trans_new as gt
 with open('subnames.txt') as f:
@@ -113,8 +114,8 @@ async def add(ctx):
     pasta = pasta.replace(',', '')
 
     list2=[]
-    list2.append(titleofpasta)
-    list2.append(pasta)
+    list2.append(titleofpasta.encode('utf-8'))
+    list2.append(pasta.encode('utf-8'))
     append_list_as_row("copy.csv",list2)
     cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
@@ -184,13 +185,7 @@ async def on_message(message):
 
 @client.command(name= 'cptitle',help="Posts the titles of all the current customized saved copypasta's. Run by +cptitle")
 async def copypasta(ctx) :
-    i=0
-    listofnames=""
-    for key, value in cpdict.items():
-        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
 
-        i+=1
-    cptitles=list(cpdict)
     await ctx.send(listofnames)
 
 @client.command(name="amogus", help="Posts a random image related to the popular game Among us. Run by +amogus")
@@ -209,7 +204,14 @@ async def cptitle(ctx, cpname) :
     else:
         if str(cpname.lower()) in cpdict:
             a=cpdict[str(cpname.lower())]
-            await ctx.send(str(a))
+            if len(a)<=2000:
+                await ctx.send(str(a))
+            else:
+                b=wrap(a, 2000)
+                for element in b:
+                    embedVar = discord.Embed(title=str(cpname),description=element.encode("UTF-8"),color=0x9CAFBE)
+                    await ctx.channel.send(embed=embedVar)
+
         else:
             await ctx.send("I'm sorry to say that that isn't a valid name. Please use cptitle to check the current names.")
 
