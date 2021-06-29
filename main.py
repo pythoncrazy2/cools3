@@ -1,5 +1,17 @@
 import pandas as pd
 import csv
+cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+
+cpdict=cpdict2
+
+i=0
+listofnames=""
+for key, value in cpdict.items():
+    listofnames+=str(str(i+1)+" "+ str(key)+"\n")
+
+    i+=1
+cptitles=list(cpdict)
+print(cptitles)
 def redcav():
     cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
@@ -14,18 +26,7 @@ def redcav():
     cptitles=list(cpdict)
     print(cptitles)
 
-cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
-cpdict=cpdict2
-
-i=0
-listofnames=""
-for key, value in cpdict.items():
-    listofnames+=str(str(i+1)+" "+ str(key)+"\n")
-
-    i+=1
-cptitles=list(cpdict)
-print(cptitles)
 
 
 import asyncpraw,random
