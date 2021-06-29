@@ -1,5 +1,8 @@
 import pandas as pd
-import csv
+
+import os
+from shutil import move
+from tempfile import NamedTemporaryFile
 cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
 cpdict=cpdict2
@@ -134,7 +137,26 @@ async def add(ctx):
 
     await ctx.send("Done :smiley:")
 
+def get_random_line(afile, default=None):
 
+    line = default
+    for i, aline in enumerate(afile, start=1):
+        if i== 1:  # random int [0..i)\n",
+            line = aline
+    return line
+
+def delfirstline():
+    file_path = 'a.txt'
+    temp_path = "a.txt"
+    with open("a.txt", 'r') as f_in:
+        with NamedTemporaryFile(mode='w', delete=False) as f_out:
+            temp_path = f_out.name
+            next(f_in)  
+            for line in f_in:
+                f_out.write(line)
+
+    os.remove(file_path)
+    move(temp_path, file_path)
 
 
 
@@ -331,8 +353,14 @@ async def bi(ctx,*,  avamember : discord.Member=None):
     blend = cv2.addWeighted(resized_bg, 0.5, resized_fg, 0.8, 0.0)
     cv2.imwrite('blendedbi.png', blend)
     await ctx.send(file=discord.File("blendedbi.png"))
-
-
+from random import randrange 
+@client.command(name="scp",help="generates a incredibly stupid ai generated copypasta")
+async def scp(ctx):
+    with open('a.txt') as f:
+        await ctx.send(get_random_line(f))
+    delfirstline()
+    print("done")
+        
 g = gt.AsyncTranslator()
 @client.command(name="st", help="Translates the text")
 async def st(ctx):
@@ -364,5 +392,4 @@ async def myLoop():
 myLoop.start()
 client.run(token)
 
-  
 
