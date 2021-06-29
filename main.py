@@ -1,19 +1,20 @@
 import pandas as pd
 import csv
-cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+def redcav():
+    cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
-cpdict=cpdict2
+    cpdict=cpdict2
 
-i=0
-listofnames=""
-for key, value in cpdict.items():
-    listofnames+=str(str(i+1)+" "+ str(key)+"\n")
+    i=0
+    listofnames=""
+    for key, value in cpdict.items():
+        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
 
-    i+=1
-cptitles=list(cpdict)
-print(cptitles)
+        i+=1
+    cptitles=list(cpdict)
+    print(cptitles)
 
-
+redcav()
 
 
 import asyncpraw,random
@@ -117,18 +118,7 @@ async def add(ctx):
     list2.append(titleofpasta.encode('utf-8'))
     list2.append(pasta.encode('utf-8'))
     append_list_as_row("copy.csv",list2)
-    cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
-
-    cpdict=cpdict2
-
-    i=0
-    listofnames=""
-    for key, value in cpdict.items():
-        listofnames+=str(str(i+1)+" "+ str(key)+"\n")
-
-        i+=1
-    cptitles=list(cpdict)
-    print(cptitles)
+    redcav()
 
     await ctx.send("Done :smiley:")
 
@@ -185,7 +175,7 @@ async def on_message(message):
 
 @client.command(name= 'cptitle',help="Posts the titles of all the current customized saved copypasta's. Run by +cptitle")
 async def copypasta(ctx) :
-
+    redcav()
     await ctx.send(listofnames)
 
 @client.command(name="amogus", help="Posts a random image related to the popular game Among us. Run by +amogus")
@@ -196,6 +186,7 @@ async def amoguspasta(ctx):
     await ctx.send(file=discord.File(random_image))
 @client.command(name= 'cp', help="Gives a copypasta given a title or the number next to it given from the cptitle command. Run by +cp (name) or +cp (number).")
 async def cptitle(ctx, cpname) :
+    redcav()
     if cpname.isdigit():
         if int(cpname)-1<len(cptitles):
             await ctx.send(cpdict[cptitles[int(cpname)-1]])
