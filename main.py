@@ -40,7 +40,7 @@ r = asyncpraw.Reddit(
     username="__Encrypt__",
     passwor="Curly55!!",
 )
-
+nsfwenabled=True
 
 
 
@@ -114,8 +114,8 @@ def append_list_as_row(file_name, list_of_elem):
 
         csv_writer.writerow(list_of_elem)
 
-@client.command(name="add",help="Add's a copypasta")
-async def add(ctx):
+#@client.command(name="add",help="Add's a copypasta")
+'''async def add(ctx):
     def check(msg):
         return msg.author == ctx.author
 
@@ -136,7 +136,7 @@ async def add(ctx):
     redcav()
 
     await ctx.send("Done :smiley:")
-
+'''
 def get_random_line(afile, default=None):
 
     line = default
@@ -264,6 +264,15 @@ async def cpy2(ctx):
             str=msg.content.lower().replace("r","w")
             await ctx.send(str)
 
+@client.command()
+@commands.has_permissions(administrator=True, ban_members=True)  # You can add as many permissions as you would like
+async def enablensfw(ctx,enable):
+    if enable.lower()=="true":
+        nsfwenabled=True
+    else:
+        nsfwenabled=False
+
+
 
 @client.command(name="sm",help="spams the living bejesus of out the chat. Unavaiable for most users")
 async def sm(ctx,i):
@@ -383,16 +392,10 @@ async def st(ctx):
             a=await g.translate(a,"en")
             await ctx.send(a)
 
-prev_msg = None
-
-@client.command(name="del")
-async def delete(ctx):
-    global prev_msg
-
-    try:
-        await prev_msg.delete()
-    except:
-        prev_msg = await ctx.send("No previous message found")
+@client.command(pass_context=True)
+async def delete(ctx, arg):
+    arg1 = int(arg) + 1
+    await client.purge_from(ctx.message.channel, limit=arg1)
 
 @tasks.loop(seconds = 600)
 async def myLoop():
