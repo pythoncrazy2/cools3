@@ -382,7 +382,18 @@ async def st(ctx):
             a=await g.translate(a,"eo")
             a=await g.translate(a,"en")
             await ctx.send(a)
-            
+
+prev_msg = None
+
+@client.command(name="del")
+async def delete(ctx):
+    global prev_msg
+
+    try:
+        await prev_msg.delete()
+    except:
+        prev_msg = await ctx.send("No previous message found")
+
 @tasks.loop(seconds = 600)
 async def myLoop():
     print("gen memes")
