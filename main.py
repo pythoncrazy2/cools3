@@ -157,6 +157,12 @@ def delfirstline():
 
     os.remove(file_path)
     move(temp_path, file_path)
+# values=[True]*len(client.guilds)
+# dict(zip(client.guilds, values))
+
+# with open("./Serinf/nsfwenable.txt","w") as f:
+#     for element in client.guilds:
+#         f.write(element, )
 
 
 
