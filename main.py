@@ -16,9 +16,8 @@ for key, value in cpdict.items():
 cptitles=list(cpdict)
 print(cptitles)
 def redcav():
-    cpdict2 = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
+    cpdict = pd.read_csv('copy.csv',sep=",", header=None, index_col=0, squeeze=True,quoting=3,error_bad_lines=False, engine="python").to_dict()
 
-    cpdict=cpdict2
 
     i=0
     listofnames=""
@@ -114,8 +113,8 @@ def append_list_as_row(file_name, list_of_elem):
 
         csv_writer.writerow(list_of_elem)
 
-#@client.command(name="add",help="Add's a copypasta")
-'''async def add(ctx):
+@client.command(name="add",help="Add's a copypasta")
+async def add(ctx):
     def check(msg):
         return msg.author == ctx.author
 
@@ -130,13 +129,14 @@ def append_list_as_row(file_name, list_of_elem):
     pasta = pasta.replace(',', '')
 
     list2=[]
-    list2.append(titleofpasta.encode('utf-8'))
-    list2.append(pasta.encode('utf-8'))
+    list2.append(titleofpasta)
+    list2.append(pasta)
     append_list_as_row("copy.csv",list2)
+    cpdict[titleofpasta]=pasta.strip()
     redcav()
 
     await ctx.send("Done :smiley:")
-'''
+
 def get_random_line(afile, default=None):
 
     line = default
@@ -231,7 +231,7 @@ async def cptitle(ctx, cpname) :
         if int(cpname)-1<len(cptitles):
             await ctx.send(cpdict[cptitles[int(cpname)-1]])
         else:
-            await ctx.send("Sorry, but that number is too big. We only have "+len(cpname)+" copypastas.")
+            await ctx.send("Sorry, but that number is too big. We only have "+len(int(cpname))+" copypastas.")
     else:
         if str(cpname.lower()) in cpdict:
             a=cpdict[str(cpname.lower())]
