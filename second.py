@@ -4,26 +4,30 @@ import discord
 import discordslashcommands as dsc
 from discord.ext import commands
 import random
-import glob
+from google_trans_new import google_translator  
+translator = google_translator()  
+
+import asyncio
 client = commands.Bot(command_prefix="+")
 
-
-@client.event
-async def on_interaction(member, interaction):
-    interaction.call_on_message("+")  # we do anything here, but we translate to a classic message
-
-
-@client.command(name="amogus", help="Posts a random image related to the popular game Among us. Run by +amogus")
-async def amoguspasta(ctx):
-    file_path_type = ["./amogusimg/*.png", "./amogusimg/*.jpg"]
-    images = glob.glob(random.choice(file_path_type))
-    random_image = random.choice(images)
-    await ctx.send(file=discord.File(random_image))
-
-
-@client.event
-async def on_ready():
-    manager = dsc.Manager(client)  # DON'T FORGET THAT
-
-
+@client.command(name="st", help="Translates the text")
+async def st(ctx):
+    channel = ctx.channel
+    messages = await channel.history(limit=2).flatten()
+    i=0
+    for msg in messages:
+        if i==0:
+            i+=1
+        else:
+            strs=msg.content
+            a= translator.translate(strs,lang_tgt='en')
+            # a= await g.translate(a,"es")
+            # a=await g.translate(a,"zh")
+            # a=await g.translate(a,"zh")
+            # a= await g.translate(a,"th")
+            # a=await g.translate(a,"ko")
+            # a=await g.translate(a,"ja")
+            # a= await g.translate(a,"eo")
+            # a= await g.translate(a,"en")
+            await ctx.send(a)
 client.run(token)

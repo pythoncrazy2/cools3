@@ -387,15 +387,15 @@ async def st(ctx):
             i+=1
         else:
             strs=msg.content
-            a=await g.translate(strs,"la")
-            a=await g.translate(a,"es")
-            a=await g.translate(a,"zh")
-            a=await g.translate(a,"zh")
-            a=await g.translate(a,"th")
-            a=await g.translate(a,"ko")
-            a=await g.translate(a,"ja")
-            a=await g.translate(a,"eo")
-            a=await g.translate(a,"en")
+            a= g.translate(strs,"la")
+            a= g.translate(a,"es")
+            a=g.translate(a,"zh")
+            a=g.translate(a,"zh")
+            a= g.translate(a,"th")
+            a=g.translate(a,"ko")
+            a=g.translate(a,"ja")
+            a= g.translate(a,"eo")
+            a= g.translate(a,"en")
             await ctx.send(a)
 
 @client.command(pass_context=True)
