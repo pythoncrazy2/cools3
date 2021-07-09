@@ -307,6 +307,14 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
         draw.text((650, 100),name3,(0,0,0),font=title_font)
         img.save('sample-out.jpg')
         await ctx.send(file=discord.File("sample-out.jpg"))
+    elif name1.lower()=="parkour":
+        name2=name_of_1st_text
+        img = Image.open('./memeimg/parkour.png')
+        draw = ImageDraw.Draw(img)
+        draw.text((10, 10),name2,(0,0,0),font=title_font)
+
+        img.save('sample-out.jpg')
+        await ctx.send(file=discord.File("sample-out.jpg"))
     if name1.lower()=="1984":
        
         import io
