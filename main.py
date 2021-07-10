@@ -179,7 +179,7 @@ async def on_ready() :
 
 @client.command(help="Tells the ping of the bot in milliseconds. Run by +ping")
 async def ping(ctx) :
-    await ctx.send("Latency is: " + str(client.latency)*1000)
+    await ctx.send("Latency is: " + str(client.latency*1000))
 
 @client.command(help="Nu-uh")
 async def nick(ctx,strs) :
@@ -297,7 +297,7 @@ async def sm(ctx,i):
 async def meme(ctx,name_of_meme_template,name_of_1st_text):
     name1=name_of_meme_template
     
-    title_font = ImageFont.truetype('Fonts/One-Regular.ttf', 50)
+    title_font = ImageFont.truetype('Fonts/One-Regular.ttf', 25)
     if name1.lower()=="samething":
         name2=name_of_1st_text.split(",")[0]
         name3=name_of_1st_text.split(",")[1]
