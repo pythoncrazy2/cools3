@@ -353,7 +353,7 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
 
             title_font = ImageFont.truetype('Fonts/One-Regular.ttf',50)
             d = ImageDraw.Draw(frame)
-            d.text((10, 100),name_of_1st_text,(0,0,0),font=title_font)
+            d.text((10, 50),name_of_1st_text,(0,0,0),font=title_font)
             del d
 
             b = io.BytesIO()
