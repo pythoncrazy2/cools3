@@ -82,7 +82,7 @@ async def gen_memes(subname):
         subnames[subname]=temp
 
 
- # 
+ #
 
 @client.command(name="rd",aliases=['memes'])
 async def meme23(ctx,subname):
@@ -151,7 +151,7 @@ def delfirstline():
     with open("a.txt", 'r') as f_in:
         with NamedTemporaryFile(mode='w', delete=False) as f_out:
             temp_path = f_out.name
-            next(f_in)  
+            next(f_in)
             for line in f_in:
                 f_out.write(line)
 
@@ -199,7 +199,7 @@ async def copypastas(ctx) :
         random_post_number = random.randint(0, 500)
         random_post = posts[random_post_number]
     await ctx.send(random_post.selftext)
-    
+
 @client.command(name="sus",help="Posts a message, and whoever responds next is sus! Run by +sus")
 async def on_message(message):
 
@@ -296,7 +296,7 @@ async def sm(ctx,i):
 @client.command(name="meme",help="makes a meme given a tempelate! A example is +meme(command) samething(name of meme template) gelatin(first additional text to be shown) gay(another aditional text to be shown). After this you put additional parameters, such as the words to use")
 async def meme(ctx,name_of_meme_template,name_of_1st_text):
     name1=name_of_meme_template
-    
+
     title_font = ImageFont.truetype('Fonts/One-Regular.ttf', 25)
     if name1.lower()=="samething":
         name2=name_of_1st_text.split(",")[0]
@@ -316,10 +316,10 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
         img.save('sample-out.jpg')
         await ctx.send(file=discord.File("sample-out.jpg"))
     if name1.lower()=="1984":
-       
+
         import io
 
-        im = Image.open('1984.gif')
+        im = Image.open('./memeimg/1984.gif')
 
         frames = []
 
@@ -338,8 +338,34 @@ async def meme(ctx,name_of_meme_template,name_of_1st_text):
 
             frames[0].save('out.gif', save_all=True, append_images=frames[1:])
 
-        
-        
+
+
+        await ctx.send(file=discord.File("out.gif"))
+    if name1.lower()=="garbage":
+
+        import io
+
+        im = Image.open('./memeimg/garbage.gif')
+
+        frames = []
+
+        for frame in ImageSequence.Iterator(im):
+
+            title_font = ImageFont.truetype('Fonts/One-Regular.ttf',50)
+            d = ImageDraw.Draw(frame)
+            d.text((10, 100),name_of_1st_text,(0,0,0),font=title_font)
+            del d
+
+            b = io.BytesIO()
+            frame.save(b, format="GIF")
+            frame = Image.open(b)
+
+            frames.append(frame)
+
+            frames[0].save('out.gif', save_all=True, append_images=frames[1:])
+
+
+
         await ctx.send(file=discord.File("out.gif"))
 
 @client.command(name="lc", help="Posts a random image related to the popular animal la creatura. Run by +lc")
@@ -354,10 +380,10 @@ async def gay(ctx,*,  avamember : discord.Member=None):
     import cv2
     fileout=str(avamember)+".jpeg"
     await avamember.avatar_url.save(fileout)
-    bg = cv2.imread('gay.png', cv2.IMREAD_COLOR) 
+    bg = cv2.imread('gay.png', cv2.IMREAD_COLOR)
     fg = cv2.imread(fileout, cv2.IMREAD_COLOR)
-    dim = (503, 503) 
-    resized_bg = cv2.resize(bg, dim, interpolation = cv2.INTER_AREA) 
+    dim = (503, 503)
+    resized_bg = cv2.resize(bg, dim, interpolation = cv2.INTER_AREA)
     resized_fg = cv2.resize(fg, dim, interpolation = cv2.INTER_AREA)
     blend = cv2.addWeighted(resized_bg, 0.5, resized_fg, 0.8, 0.0)
     cv2.imwrite('blended.png', blend)
@@ -368,22 +394,22 @@ async def bi(ctx,*,  avamember : discord.Member=None):
     import cv2
     fileout=str(avamember)+"bi"+".jpeg"
     await avamember.avatar_url.save(fileout)
-    bg = cv2.imread('bi.jpg', cv2.IMREAD_COLOR) 
+    bg = cv2.imread('bi.jpg', cv2.IMREAD_COLOR)
     fg = cv2.imread(fileout, cv2.IMREAD_COLOR)
-    dim = (503, 503) 
-    resized_bg = cv2.resize(bg, dim, interpolation = cv2.INTER_AREA) 
+    dim = (503, 503)
+    resized_bg = cv2.resize(bg, dim, interpolation = cv2.INTER_AREA)
     resized_fg = cv2.resize(fg, dim, interpolation = cv2.INTER_AREA)
     blend = cv2.addWeighted(resized_bg, 0.5, resized_fg, 0.8, 0.0)
     cv2.imwrite('blendedbi.png', blend)
     await ctx.send(file=discord.File("blendedbi.png"))
-from random import randrange 
+from random import randrange
 @client.command(name="scp",help="generates a incredibly stupid ai generated copypasta")
 async def scp(ctx):
     with open('a.txt') as f:
         await ctx.send(get_random_line(f))
     delfirstline()
     print("done")
-        
+
 g = gt.AsyncTranslator()
 @client.command(name="st", help="Translates the text")
 async def st(ctx):
@@ -416,6 +442,25 @@ async def myLoop():
     print("gen memes")
     for element in nameofsubs:
         await gen_memes(element)
+permabanned=[]
+raffle=[]
+# @client.command(name="sd",help="only for yagatzir")
+# async def smugdislike(ctx,member: discord.Member=None):
+#     channel = ctx.channel
+#     messages = await channel.history(limit=200).flatten()
+#     for message in messages:
+#     # loop over messages
+#         if message.reference: # if is not None its a reply
+#             if '''All subscribers are invited to join our routine daily smug dislike of Encrypt's light mode abuse. :clipboard: Subscriptions are open! :clipboard: Respond with "sign me up" to be notified of our daily smug dislike session.''' in message.refrence:
+#                 raffle.append(message.author.id)
+
+#     await ctx.send("done")
+#     await ctx.send(raffle)
+#     print(raffle)
+
+
+
+
 
 myLoop.start()
 client.run(token)
