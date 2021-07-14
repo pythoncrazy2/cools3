@@ -170,7 +170,7 @@ def delfirstline():
 #for filename in os.listdir('./cogs'):
 #    if filename.endswith('.py'):
  #      client.load_extension(f'cogs.{filename[:-3]}')
-token = "ODQwMjczNzUzMDY0ODY1ODI0.YJVz6g.lLrdKBxbkw1Q5gVTlnw2RkpHF98"
+token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
 
 @client.event
 async def on_ready() :
@@ -444,19 +444,10 @@ async def myLoop():
         await gen_memes(element)
 permabanned=[]
 raffle=[]
-# @client.command(name="sd",help="only for yagatzir")
-# async def smugdislike(ctx,member: discord.Member=None):
-#     channel = ctx.channel
-#     messages = await channel.history(limit=200).flatten()
-#     for message in messages:
-#     # loop over messages
-#         if message.reference: # if is not None its a reply
-#             if '''All subscribers are invited to join our routine daily smug dislike of Encrypt's light mode abuse. :clipboard: Subscriptions are open! :clipboard: Respond with "sign me up" to be notified of our daily smug dislike session.''' in message.refrence:
-#                 raffle.append(message.author.id)
-
-#     await ctx.send("done")
-#     await ctx.send(raffle)
-#     print(raffle)
+@client.command(name="sd",help="only for yagatzir")
+async def smugdislike(ctx,listofnames):
+    raffle=listofnames.split(",")
+    await ctx.send(random.choice(raffle))
 
 
 
