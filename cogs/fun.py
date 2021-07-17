@@ -332,28 +332,28 @@ class fun(commands.Cog):
         await ctx.send(embed=emb)
 
 
-    @commands.command()
-    @commands.cooldown(rate=1, per=2.0, type=commands.BucketType.user)
-    async def urban(self, ctx, *, search: str):
-        """ Find the 'best' definition to your words """
-        async with ctx.channel.typing():
-            url = await http.get(f'https://api.urbandictionary.com/v0/define?term={search}', res_method="json")
+    # @commands.command()
+    # @commands.cooldown(rate=1, per=2.0, type=commands.BucketType.user)
+    # async def urban(self, ctx, *, search: str):
+    #     """ Find the 'best' definition to your words """
+    #     async with ctx.channel.typing():
+    #         url = await aiohttp.get(f'https://api.urbandictionary.com/v0/define?term={search}', res_method="json")
 
-            if url is None:
-                return await ctx.send("I think the API broke...")
+    #         if url is None:
+    #             return await ctx.send("I think the API broke...")
 
-            if not len(url['list']):
-                return await ctx.send("Couldn't find your search in the dictionary...")
+    #         if not len(url['list']):
+    #             return await ctx.send("Couldn't find your search in the dictionary...")
 
-            result = sorted(url['list'], reverse=True, key=lambda g: int(g["thumbs_up"]))[0]
+    #         result = sorted(url['list'], reverse=True, key=lambda g: int(g["thumbs_up"]))[0]
 
-            definition = result['definition']
-            if len(definition) >= 1000:
-                    definition = definition[:1000]
-                    definition = definition.rsplit(' ', 1)[0]
-                    definition += '...'
+    #         definition = result['definition']
+    #         if len(definition) >= 1000:
+    #                 definition = definition[:1000]
+    #                 definition = definition.rsplit(' ', 1)[0]
+    #                 definition += '...'
 
-            await ctx.send(f"📚 Definitions for **{result['word']}**```fix\n{definition}```")
+    #         await ctx.send(f"📚 Definitions for **{result['word']}**```fix\n{definition}```")
 
 
    
