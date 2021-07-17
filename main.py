@@ -167,9 +167,9 @@ def delfirstline():
 
 
 
-#for filename in os.listdir('./cogs'):
-#    if filename.endswith('.py'):
- #      client.load_extension(f'cogs.{filename[:-3]}')
+for filename in os.listdir('./cogs'):
+     if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
 token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
 
 @client.event

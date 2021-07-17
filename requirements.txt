@@ -4,3 +4,5 @@ pillow
 pandas
 opencv-python-headless
 async_google_trans_new
+discord-ext-paginator
+bs4
