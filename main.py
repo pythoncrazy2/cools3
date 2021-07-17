@@ -185,9 +185,7 @@ async def ping(ctx) :
 async def nick(ctx,strs) :
     await ctx.guild.me.edit(nick=strs)
 
-@client.command(name="whoami",help="Tells who you are. Run by +whoami")
-async def whoami(ctx) :
-    await ctx.send(f"You are {ctx.message.author.name}")
+
 
 @client.command(name= 'copypasta',help="Gets a copypasta from the subreddit r/copypasta. Run by +copypasta")
 async def copypastas(ctx) :
