@@ -7,3 +7,5 @@ async_google_trans_new
 discord-ext-paginator
 bs4
 httpx
+lxml
+typing

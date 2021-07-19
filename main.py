@@ -168,13 +168,13 @@ def delfirstline():
 
 
 for filename in os.listdir('./cogs'):
-     if filename.endswith('.py'):
+     if filename.endswith('.py') and filename!="constants.py":
         client.load_extension(f'cogs.{filename[:-3]}')
 token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
 
 @client.event
 async def on_ready() :
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game("Currently in " +str(len(client.guilds))+" servers"))
+    await client.change_presence(status = discord.Status.idle)# activity = discord.Game("Currently in " +str(len(client.guilds))+" servers"))
     print("I am online")
 
 @client.command(help="Tells the ping of the bot in milliseconds. Run by +ping")

@@ -5,15 +5,52 @@ import asyncio
 import aiohttp
 import discord
 from discord.ext import commands
-
-
-from discord.ext import commands
+import re
+import requests
+import urllib.request
 from discord.ext.commands import clean_content
-
+from .constants import ball, emoji_dict, regionals
+from typing import Optional, Union
+import contextlib
 
 class fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+
+    def has_dupe(self, duper: Union[str, list]) -> bool:
+        collect_my_duper = list(filter(lambda x: x != "⃣", duper))
+        #  ⃣ appears twice in the number unicode thing, so that must be stripped
+        return len(set(collect_my_duper)) != len(collect_my_duper)
+    def replace_combos(self, react_me: str) -> str:
+        for combo in emoji_dict["combination"]:
+            if combo[0] in react_me:
+                react_me = react_me.replace(combo[0], combo[1], 1)
+        return react_me
+
+    # used in [p]react, replaces e.g. 'aaaa' with '🇦🅰🍙🔼'
+    def replace_letters(self, react_me: str):
+        for char in "abcdefghijklmnopqrstuvwxyz0123456789!?":
+            char_count = react_me.count(char)
+            if char_count > 1:  # there's a duplicate of this letter:
+                if len(emoji_dict[char]) >= char_count:
+                    # if we have enough different ways to say the letter to complete the emoji chain
+                    i = 0
+                    while i < char_count:
+                        # moving goal post necessitates while loop instead of for
+                        if emoji_dict[char][i] not in react_me:
+                            react_me = react_me.replace(char, emoji_dict[char][i], 1)
+                        else:
+                            # skip this one because it's already been used by another replacement (e.g. circle emoji used to replace O already, then want to replace 0)
+                            char_count += 1
+                        i += 1
+            else:
+                if char_count == 1:
+                    react_me = react_me.replace(char, emoji_dict[char][0])
+        return react_me
+
+
+
 
     async def cog_command_error(self, ctx, error):
         print('Error in {0.command.qualified_name}: {1}'.format(ctx, error))
@@ -332,29 +369,138 @@ class fun(commands.Cog):
         await ctx.send(embed=emb)
 
 
-    # @commands.command()
-    # @commands.cooldown(rate=1, per=2.0, type=commands.BucketType.user)
-    # async def urban(self, ctx, *, search: str):
-    #     """ Find the 'best' definition to your words """
-    #     async with ctx.channel.typing():
-    #         url = await aiohttp.get(f'https://api.urbandictionary.com/v0/define?term={search}', res_method="json")
+    @commands.command(aliases=['ud'])
+    async def urban(self,ctx, *msg):
+        """Searches on the Urban Dictionary."""
+      
+        word = ' '.join(msg)
+        api = "http://api.urbandictionary.com/v0/define"
 
-    #         if url is None:
-    #             return await ctx.send("I think the API broke...")
+        # Send request to the Urban Dictionary API and grab info
+        response = requests.get(api, params=[("term", word)]).json()
+        embed = discord.Embed(description="No results found!", colour=0xFF0000)
+        if len(response["list"]) == 0:
+            return await ctx.send(embed=embed)
+        # Add results to the embed
+        embed = discord.Embed(title="Word", description=word, colour=embed.colour)
+        embed.add_field(name="Top definition:", value=response['list'][0]['definition'])
+        embed.add_field(name="Examples:", value=response['list'][0]['example'])
+        await ctx.send(embed=embed)
 
-    #         if not len(url['list']):
-    #             return await ctx.send("Couldn't find your search in the dictionary...")
 
-    #         result = sorted(url['list'], reverse=True, key=lambda g: int(g["thumbs_up"]))[0]
+    @commands.command(name="lick", aliases=["mlem"])
+    async def lick(self, ctx, person: discord.Member):
+        '''
+        Mlem
+        '''
+        if person == ctx.author:
+            return await ctx.reply("You can't lick yourself!", mention_author=False)
 
-    #         definition = result['definition']
-    #         if len(definition) >= 1000:
-    #                 definition = definition[:1000]
-    #                 definition = definition.rsplit(' ', 1)[0]
-    #                 definition += '...'
+        if person == self.bot.user:
+            return await ctx.reply("I don't like being licked!", mention_author=False)
 
-    #         await ctx.send(f"📚 Definitions for **{result['word']}**```fix\n{definition}```")
+        tastesLike = [
+            "bacon",
+            "tortilla chips",
+            "chezborger",
+            "ketchup on pasta",
+            "bubblegum",
+            "chicken",
+            "honey",
+            "a creeper",
+            "corn",
+            "butts",
+            "a jolly rancher",
+            "cheese",
+            "pickles",
+            "lemons",
+            "cucumbers"
+        ]
 
+        await ctx.reply(f"{ctx.author.mention} licked {person.mention}! They taste like {random.choice(tastesLike)}!", mention_author=False)
+    @commands.command()
+    async def regional(self, ctx: commands.Context, *, msg: str) -> None:
+        """Replace letters with regional indicator emojis."""
+        regional_list = [regionals[x.lower()] if x.lower() in regionals else x for x in list(msg)]
+        await ctx.send("\u200b".join(regional_list))
+    @commands.command()
+    async def react(
+        self,
+        ctx: commands.Context,
+        msg: str,
+        message: Optional[discord.Message],
+    ) -> None:
+        """
+        Add letter(s) as reaction to previous message.
+        `[message]` Can be a message ID from the current channel, a jump URL,
+        or a channel_id-message_id from shift + copying ID on the message.
+        """
+        if message is None:
+            async for messages in ctx.channel.history(limit=2):
+                message = messages
+
+        reactions = []
+        non_unicode_emoji_list = []
+        react_me = ""
+        # this is the string that will hold all our unicode converted characters from msg
+
+        # replace all custom server emoji <:emoji:123456789> with "<" and add emoji ids to non_unicode_emoji_list
+        emotes = re.findall(r"<a?:(?:[a-zA-Z0-9]+?):(?:[0-9]+?)>", msg.lower())
+        react_me = re.sub(r"<a?:([a-zA-Z0-9]+?):([0-9]+?)>", "", msg.lower())
+
+        for emote in emotes:
+            reactions.append(discord.utils.get(self.bot.emojis, id=int(emote.split(":")[-1][:-1])))
+            non_unicode_emoji_list.append(emote)
+
+        if self.has_dupe(non_unicode_emoji_list):
+            return await ctx.send(
+                "You requested that I react with at least two of the exact same specific emoji. "
+                "I'll try to find alternatives for alphanumeric text, but if you specify a specific emoji must be used, I can't help."
+            )
+
+        react_me_original = react_me
+        # we'll go back to this version of react_me if prefer_combine
+        # is false but we can't make the reaction happen unless we combine anyway.
+
+        if self.has_dupe(react_me):
+            # there's a duplicate letter somewhere, so let's go ahead try to fix it.
+            react_me = self.replace_combos(react_me)
+            react_me = self.replace_letters(react_me)
+            # print(react_me)
+            if self.has_dupe(react_me):  # check if we were able to solve the dupe
+                react_me = react_me_original
+                react_me = self.replace_combos(react_me)
+                react_me = self.replace_letters(react_me)
+                if self.has_dupe(react_me):
+                    # this failed too, so there's really nothing we can do anymore.
+                    return await ctx.send(
+                        "Failed to fix all duplicates. Cannot react with this string."
+                    )
+
+            for char in react_me:
+                if (
+                    char not in "0123456789"
+                ):  # these unicode characters are weird and actually more than one character.
+                    if char != "⃣":  # </3
+                        reactions.append(char)
+                else:
+                    reactions.append(emoji_dict[char][0])
+        else:  # probably doesn't matter, but by treating the case without dupes seperately, we can save some time
+            for char in react_me:
+                if char in "abcdefghijklmnopqrstuvwxyz0123456789!?":
+                    reactions.append(emoji_dict[char][0])
+                else:
+                    reactions.append(char)
+
+        if message.channel.permissions_for(ctx.me).add_reactions:
+            with contextlib.suppress(discord.HTTPException):
+                for reaction in reactions:
+                    await message.add_reaction(reaction)
+        if message.channel.permissions_for(ctx.me).manage_messages:
+            with contextlib.suppress(discord.HTTPException):
+                await ctx.message.delete()
+        else:
+            await ctx.tick()
 
    
 
