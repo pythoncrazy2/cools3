@@ -168,7 +168,7 @@ def delfirstline():
 
 
 for filename in os.listdir('./cogs'):
-     if filename.endswith('.py') and filename!="constants.py":
+     if filename.endswith('.py') and filename!="constants.py" and filename!="Nullify.py" and filename!="DisplayName.py":
         client.load_extension(f'cogs.{filename[:-3]}')
 token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
 
