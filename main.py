@@ -417,6 +417,9 @@ async def scp(ctx):
     delfirstline()
     print("done")
 
+
+
+
 g = gt.AsyncTranslator()
 @client.command(name="st", help="Translates the text")
 async def st(ctx):

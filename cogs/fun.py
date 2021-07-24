@@ -424,6 +424,7 @@ class fun(commands.Cog):
         regional_list = [regionals[x.lower()] if x.lower() in regionals else x for x in list(msg)]
         await ctx.send("\u200b".join(regional_list))
     @commands.command()
+    @commands.cooldown(1,30,commands.BucketType.guild)
     async def react(
         self,
         ctx: commands.Context,
@@ -502,7 +503,12 @@ class fun(commands.Cog):
         else:
             await ctx.tick()
 
-   
+    @react.error
+    async def command_name_error(self,ctx, error):
+        gayColor = 0xFF00FF
+        if isinstance(error, commands.CommandOnCooldown):
+            em = discord.Embed(title=f"Slow it down bro!",description=f"Try again in {error.retry_after:.2f}s.", color=gayColor)
+            await ctx.send(embed=em)
 
 
 
