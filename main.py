@@ -54,6 +54,8 @@ import os
 import glob, random
 from PIL import Image, ImageDraw, ImageSequence,ImageFont
 from textwrap import wrap
+
+
 client = commands.Bot(command_prefix="+")
 import async_google_trans_new as gt
 with open('subnames.txt') as f:
@@ -61,6 +63,13 @@ with open('subnames.txt') as f:
 subnames={}
 temp=[]
 a=0
+client.remove_command('help')
+from pretty_help import DefaultMenu, PrettyHelp
+menu = DefaultMenu(page_left="\U0001F44D", page_right="👎", remove=":grinning: ", active_time=5)
+ending_note = "The ending note from {ctx.bot.user.name}\nFor command {help.clean_prefix}{help.invoked_with}"
+
+
+client.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
 async def gen_memes(subname):
     subreddit = await r.subreddit(subname)
     top = subreddit.new(limit = 1000)

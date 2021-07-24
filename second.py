@@ -1,33 +1,57 @@
+import textwrap
+from io import BytesIO
 
-token = "ODUzODE1NTMwMDgzMDU3NjY0.YMa3rQ.1slIk_BuRjX0XwROW-rzvYQk9OA"
-import discord
-import discordslashcommands as dsc
-from discord.ext import commands
-import random
-from google_trans_new import google_translator  
-translator = google_translator()  
+from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageSequence
 
-import asyncio
-client = commands.Bot(command_prefix="+")
 
-@client.command(name="st", help="Translates the text")
-async def st(ctx):
-    channel = ctx.channel
-    messages = await channel.history(limit=2).flatten()
-    i=0
-    for msg in messages:
-        if i==0:
-            i+=1
-        else:
-            strs=msg.content
-            a= translator.translate(strs,lang_tgt='en')
-            # a= await g.translate(a,"es")
-            # a=await g.translate(a,"zh")
-            # a=await g.translate(a,"zh")
-            # a= await g.translate(a,"th")
-            # a=await g.translate(a,"ko")
-            # a=await g.translate(a,"ja")
-            # a= await g.translate(a,"eo")
-            # a= await g.translate(a,"en")
-            await ctx.send(a)
-client.run(token)
+def caption(fn: str, text: str):
+    old_im = Image.open(fn)
+    ft = old_im.format
+    W = old_im.size[0]
+    font = ImageFont.truetype('./Fonts/One-Regular.ttf', 10) # replace with your own font
+
+    width = 10
+    while True:
+        lines = textwrap.wrap(text, width=width)
+        if (font.getsize(max(lines, key=len))[0]) > (0.9 * W):
+            break
+        width += 1
+
+    # amount of lines * height of one line
+    bar_height = len(lines) * (font.getsize(lines[0])[1])
+    frames = []
+    for frame in ImageSequence.Iterator(old_im):
+        frame = ImageOps.expand(
+            frame,
+            border=(0, bar_height, 0, 0),
+            fill='white'
+        )
+        draw = ImageDraw.Draw(frame)
+        for i, line in enumerate(lines):
+            w, h = draw.multiline_textsize(line, font=font)
+            # Position is x: centered, y: line number * height of line
+            draw.text(
+                ((W - w) / 2, i * h),
+                line,
+                font=font,
+                fill='black'
+            )
+
+        del draw
+        b = BytesIO()
+        frame.save(b, format=ft)
+        b.seek(0)
+        frames.append(Image.open(b))
+
+    frames[0].save(
+        f'out.{ft}',
+        save_all=True,
+        append_images=frames[1:],
+        format=ft,
+        loop=0,
+        optimize=True
+    )
+caption(
+'./memeimg/1984.gif',
+'sus'
+)

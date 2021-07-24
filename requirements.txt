@@ -10,3 +10,4 @@ httpx
 lxml
 typing
 pyquery
+discord-pretty-help
