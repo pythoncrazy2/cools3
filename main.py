@@ -449,6 +449,13 @@ async def myLoop():
     print("gen memes")
     for element in nameofsubs:
         await gen_memes(element)
+        
+        
+@tasks.loop(seconds=86400)
+async def smugdislike2():
+    await client.wait_until_ready()
+    channel = client.get_channel(834132932271800320)
+    await channel.send("day 69420 of asking for react perms for copypasta bot back <@711086194896797707> <@864943376637755393>")
 permabanned=[]
 raffle=[]
 @client.command(name="sd",help="only for yagatzir")
@@ -461,6 +468,7 @@ async def smugdislike(ctx,listofnames):
 
 
 myLoop.start()
+smugdislike2.start()
 client.run(token)
 
 
