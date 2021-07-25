@@ -424,7 +424,7 @@ class fun(commands.Cog):
         regional_list = [regionals[x.lower()] if x.lower() in regionals else x for x in list(msg)]
         await ctx.send("\u200b".join(regional_list))
     @commands.command()
-    @commands.cooldown(1,30,commands.BucketType.guild)
+    @commands.cooldown(1,5,commands.BucketType.guild)
     async def react(
         self,
         ctx: commands.Context,

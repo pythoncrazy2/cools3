@@ -63,13 +63,11 @@ with open('subnames.txt') as f:
 subnames={}
 temp=[]
 a=0
-client.remove_command('help')
-from pretty_help import DefaultMenu, PrettyHelp
-menu = DefaultMenu(page_left="\U0001F44D", page_right="👎", remove=":grinning: ", active_time=5)
-ending_note = "The ending note from {ctx.bot.user.name}\nFor command {help.clean_prefix}{help.invoked_with}"
 
 
-client.help_command = PrettyHelp(menu=menu, ending_note=ending_note)
+
+
+
 async def gen_memes(subname):
     subreddit = await r.subreddit(subname)
     top = subreddit.new(limit = 1000)
@@ -300,7 +298,7 @@ async def sm(ctx,i):
             random_post = posts[random_post_number]
         await ctx.send(random_post.selftext)
         a+=1
-@client.command(name="meme",help="makes a meme given a tempelate! A example is +meme(command) samething(name of meme template) gelatin(first additional text to be shown) gay(another aditional text to be shown). After this you put additional parameters, such as the words to use")
+#@client.command(name="meme",help="makes a meme given a tempelate! A example is +meme(command) samething(name of meme template) gelatin(first additional text to be shown) gay(another aditional text to be shown). After this you put additional parameters, such as the words to use")
 async def meme(ctx,name_of_meme_template,name_of_1st_text):
     name1=name_of_meme_template
 
