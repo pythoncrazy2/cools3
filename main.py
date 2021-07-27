@@ -56,14 +56,14 @@ from PIL import Image, ImageDraw, ImageSequence,ImageFont
 from textwrap import wrap
 
 
-client = commands.Bot(command_prefix="+")
+client = commands.Bot(command_prefix="+",help_command=None)
 import async_google_trans_new as gt
 with open('subnames.txt') as f:
     nameofsubs = [line.rstrip() for line in f]
 subnames={}
 temp=[]
 a=0
-
+client.remove_command('help')
 
 
 
