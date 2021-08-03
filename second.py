@@ -1,57 +1,43 @@
-import textwrap
-from io import BytesIO
+import os
+import discord
+#from keepalive import keep_alive
+import requests
+import json
+import random
+from discord.ext import commands
+client = commands.Bot(command_prefix="yavor")
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageSequence
+def get_fact():
+  response = requests.get("https://uselessfacts.jsph.pl/random.json?language=en%22")
+  json_data = json.loads(response.text)
+  fact = json_data["text"]
+  return(fact)
+
+@client.event
+async def on_ready():
+  print('ok and')
+
+@client.event
+async def on_message(message):
+  if message.author.id == 720671710264950784:
+    await message.channel.send('danamer')
+    
+    
+    
+@client.command()
+async def fact(ctx):
+    await ctx.send(get_fact())
+    
+
+@client.command(aliases=["hi"])
+async def hello(ctx):
+    mylist = ["Hello!", "Greetings, mortal.", "Hi there!", "Nice to meet you!", "Hey.", "Ahoy!", "‘Ello, gov’nor!"]
+    await message.channel.send(random.choice(mylist))
+
+@client.command()
+async def whoami(ctx):
+    await message.channel.send(message.author)
 
 
-def caption(fn: str, text: str):
-    old_im = Image.open(fn)
-    ft = old_im.format
-    W = old_im.size[0]
-    font = ImageFont.truetype('./Fonts/One-Regular.ttf', 10) # replace with your own font
-
-    width = 10
-    while True:
-        lines = textwrap.wrap(text, width=width)
-        if (font.getsize(max(lines, key=len))[0]) > (0.9 * W):
-            break
-        width += 1
-
-    # amount of lines * height of one line
-    bar_height = len(lines) * (font.getsize(lines[0])[1])
-    frames = []
-    for frame in ImageSequence.Iterator(old_im):
-        frame = ImageOps.expand(
-            frame,
-            border=(0, bar_height, 0, 0),
-            fill='white'
-        )
-        draw = ImageDraw.Draw(frame)
-        for i, line in enumerate(lines):
-            w, h = draw.multiline_textsize(line, font=font)
-            # Position is x: centered, y: line number * height of line
-            draw.text(
-                ((W - w) / 2, i * h),
-                line,
-                font=font,
-                fill='black'
-            )
-
-        del draw
-        b = BytesIO()
-        frame.save(b, format=ft)
-        b.seek(0)
-        frames.append(Image.open(b))
-
-    frames[0].save(
-        f'out.{ft}',
-        save_all=True,
-        append_images=frames[1:],
-        format=ft,
-        loop=0,
-        optimize=True
-    )
-caption(
-'./memeimg/1984.gif',
-'sus'
-)
+#keep_alive()
+client.run('ODUzODE1NTMwMDgzMDU3NjY0.YMa3rQ.1slIk_BuRjX0XwROW-rzvYQk9OA')

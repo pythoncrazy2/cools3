@@ -56,14 +56,13 @@ from PIL import Image, ImageDraw, ImageSequence,ImageFont
 from textwrap import wrap
 
 
-client = commands.Bot(command_prefix="+",help_command=None)
+client = commands.Bot(command_prefix="+")
 import async_google_trans_new as gt
 with open('subnames.txt') as f:
     nameofsubs = [line.rstrip() for line in f]
 subnames={}
 temp=[]
 a=0
-client.remove_command('help')
 
 
 
@@ -144,26 +143,15 @@ async def add(ctx):
 
     await ctx.send("Done :smiley:")
 
-def get_random_line(afile, default=None):
-
-    line = default
-    for i, aline in enumerate(afile, start=1):
-        if i== 1:  # random int [0..i)\n",
-            line = aline
+def get_random_line(afile):
+    line = next(afile)
+    for num, aline in enumerate(afile, 2):
+        if random.randrange(num):
+            continue
+        line = aline
     return line
 
-def delfirstline():
-    file_path = 'a.txt'
-    temp_path = "a.txt"
-    with open("a.txt", 'r') as f_in:
-        with NamedTemporaryFile(mode='w', delete=False) as f_out:
-            temp_path = f_out.name
-            next(f_in)
-            for line in f_in:
-                f_out.write(line)
 
-    os.remove(file_path)
-    move(temp_path, file_path)
 # values=[True]*len(client.guilds)
 # dict(zip(client.guilds, values))
 
@@ -412,7 +400,6 @@ from random import randrange
 async def scp(ctx):
     with open('a.txt') as f:
         await ctx.send(get_random_line(f))
-    delfirstline()
     print("done")
 
 
