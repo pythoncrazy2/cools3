@@ -143,14 +143,10 @@ async def add(ctx):
 
     await ctx.send("Done :smiley:")
 
-def get_random_line(afile):
-    line = next(afile)
-    for num, aline in enumerate(afile, 2):
-        if random.randrange(num):
-            continue
-        line = aline
-    return line
-
+def get_random_line():
+    with open("a.txt") as f:
+        lines = f.readlines()
+    return random.choice(lines)
 
 # values=[True]*len(client.guilds)
 # dict(zip(client.guilds, values))
@@ -397,9 +393,11 @@ async def bi(ctx,*,  avamember : discord.Member=None):
     await ctx.send(file=discord.File("blendedbi.png"))
 from random import randrange
 @client.command(name="scp",help="generates a incredibly stupid ai generated copypasta")
-async def scp(ctx):
-    with open('a.txt') as f:
-        await ctx.send(get_random_line(f))
+async def scp(ctx,*,num):
+    for i in range(int(num)):
+        bsdsadd= get_random_line()
+        print(bsdsadd)
+        await ctx.send(bsdsadd)
     print("done")
 
 
