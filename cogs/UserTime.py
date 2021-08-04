@@ -4,7 +4,12 @@ from .import FuzzySearch
 def setup(bot):
 	# This module isn't actually a cog
     return
-
+def getGlobalUserStat(self, user, stat, default = None):
+        try:
+            userList = self.serverDict['GlobalMembers']
+        except:
+            return None
+        return userList.get(str(user.id),{}).get(stat,default)
 def getClockForTime(time_string):
 	# Assumes a HH:MM PP format
 	try:

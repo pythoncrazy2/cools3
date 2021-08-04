@@ -158,6 +158,17 @@ def get_random_line():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 for filename in os.listdir('./cogs'):
      if filename.endswith('.py') and filename!="constants.py" and filename!="Nullify.py" and filename!="DisplayName.py":
         client.load_extension(f'cogs.{filename[:-3]}')
