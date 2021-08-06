@@ -32,14 +32,7 @@ def redcav():
 
 
 import asyncpraw,random
-r = asyncpraw.Reddit(
-    client_id="Fg-ERt721_7aBg",
-    client_secret="7EQSbKaCdzlt_saWVmfhtkbKvqnn9g",
-    user_agent="__Encrypt__",
-    username="__Encrypt__",
-    passwor="Curly55!!",
-)
-nsfwenabled=True
+
 
 
 
@@ -172,7 +165,7 @@ def get_random_line():
 for filename in os.listdir('./cogs'):
      if filename.endswith('.py') and filename!="constants.py" and filename!="Nullify.py" and filename!="DisplayName.py" and filename!="checks.py":
         client.load_extension(f'cogs.{filename[:-3]}')
-token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
+
 
 @client.event
 async def on_ready() :
