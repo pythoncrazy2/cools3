@@ -170,7 +170,7 @@ def get_random_line():
 
 
 for filename in os.listdir('./cogs'):
-     if filename.endswith('.py') and filename!="constants.py" and filename!="Nullify.py" and filename!="DisplayName.py":
+     if filename.endswith('.py') and filename!="constants.py" and filename!="Nullify.py" and filename!="DisplayName.py" and filename!="checks.py":
         client.load_extension(f'cogs.{filename[:-3]}')
 token = "ODY0OTQzMzc2NjM3NzU1Mzkz.YO8zSg.f7FwDOO_T6lbYX_fciGd9zrD7A8"
 
@@ -387,7 +387,7 @@ async def gay(ctx,*,  avamember : discord.Member=None):
     resized_fg = cv2.resize(fg, dim, interpolation = cv2.INTER_AREA)
     blend = cv2.addWeighted(resized_bg, 0.5, resized_fg, 0.8, 0.0)
     cv2.imwrite('blended.png', blend)
-    await ctx.send(file=discord.File("blended.png"))
+    await ctx.send(file=discord.File("blendedgay.png"))
 
 @client.command(name="bi",help="Given a user(pinging them), makes their avatar bi. Run by +bi")
 async def bi(ctx,*,  avamember : discord.Member=None):
@@ -402,6 +402,22 @@ async def bi(ctx,*,  avamember : discord.Member=None):
     blend = cv2.addWeighted(resized_bg, 0.5, resized_fg, 0.8, 0.0)
     cv2.imwrite('blendedbi.png', blend)
     await ctx.send(file=discord.File("blendedbi.png"))
+    
+@client.command(name="ace", help="Given a user(pinging them), makes their avatar ace. Run by +ace")
+async def ace(ctx,*,  avamember : discord.Member=None):
+    import cv2
+    fileout=str(avamember)+".jpeg"
+    await avamember.avatar_url.save(fileout)
+    bg = cv2.imread('ace.png', cv2.IMREAD_COLOR)
+    fg = cv2.imread(fileout, cv2.IMREAD_COLOR)
+    dim = (503, 503)
+    resized_bg = cv2.resize(bg, dim, interpolation = cv2.INTER_AREA)
+    resized_fg = cv2.resize(fg, dim, interpolation = cv2.INTER_AREA)
+    blend = cv2.addWeighted(resized_bg, 0.75, resized_fg, 0.8, 0.0)
+    cv2.imwrite('blendedace.png', blend)
+    await ctx.send(file=discord.File("blendedace.png"))
+    
+    
 from random import randrange
 @client.command(name="scp",help="generates a incredibly stupid ai generated copypasta")
 async def scp(ctx,*,num):
@@ -410,6 +426,7 @@ async def scp(ctx,*,num):
         print(bsdsadd)
         await ctx.send(bsdsadd)
     print("done")
+
 
 
 

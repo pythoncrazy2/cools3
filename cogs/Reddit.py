@@ -58,13 +58,6 @@ class Reddit(commands.Cog):
 		global Utils, DisplayName
 		Utils = self.bot.get_cog("Utils")
 		DisplayName = self.bot.get_cog("DisplayName")
-		
-	def strip_tags(self, html):
-		parser = HTMLParser()
-		html = parser.unescape(html)
-		s = MLStripper()
-		s.feed(html)
-		return s.get_data()
 	
 	async def getImageHEAD(self, url):
 		response = await DL.async_head_json(url)
@@ -112,9 +105,9 @@ class Reddit(commands.Cog):
 			try:
 				theJSON = r["data"]["children"][randnum]["data"]
 				if 'over_18' in theJSON:
-					returnDict = { 'title': theJSON['title'], 'content': self.strip_tags(theJSON['selftext_html']), 'over_18': theJSON['over_18'] }
+					returnDict = { 'title': theJSON['title'], 'content': (theJSON['selftext']), 'over_18': theJSON['over_18'] }
 				else:
-					returnDict = { 'title': theJSON['title'], 'content': self.strip_tags(theJSON['selftext_html']), 'over_18': False }
+					returnDict = { 'title': theJSON['title'], 'content':(theJSON['selftext']), 'over_18': False }
 				break
 			except IndexError:
 				continue

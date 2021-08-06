@@ -28,7 +28,7 @@ class fun(commands.Cog):
                 react_me = react_me.replace(combo[0], combo[1], 1)
         return react_me
 
-    # used in [p]react, replaces e.g. 'aaaa' with '🇦🅰🍙🔼'
+    # used in +react, replaces e.g. 'aaaa' with '🇦🅰🍙🔼'
     def replace_letters(self, react_me: str):
         for char in "abcdefghijklmnopqrstuvwxyz0123456789!?":
             char_count = react_me.count(char)
@@ -48,7 +48,12 @@ class fun(commands.Cog):
                 if char_count == 1:
                     react_me = react_me.replace(char, emoji_dict[char][0])
         return react_me
-
+    text_flip = {}
+    char_list = "!#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}"
+    alt_char_list = "{|}zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ,‾^[\]Z⅄XMΛ∩┴SɹQԀONW˥ʞſIHפℲƎpƆq∀@¿<=>;:68ㄥ9ϛㄣƐᄅƖ0/˙-'+*(),⅋%$#¡"[::-1]
+    for idx, char in enumerate(char_list):
+        text_flip[char] = alt_char_list[idx]
+        text_flip[alt_char_list[idx]] = char
 
 
 
@@ -505,11 +510,37 @@ class fun(commands.Cog):
 
     @react.error
     async def command_name_error(self,ctx, error):
+        
         gayColor = 0xFF00FF
         if isinstance(error, commands.CommandOnCooldown):
             em = discord.Embed(title=f"Slow it down bro!",description=f"Try again in {error.retry_after:.2f}s.", color=gayColor)
             await ctx.send(embed=em)
-
+    
+    
+    
+    @commands.command(pass_context=True)
+    async def space(self, ctx, *, msg):
+        
+        """Add n spaces between each letter. Ex: [p]space 2 thicc"""
+        if msg.split(' ', 1)[0].isdigit():
+            spaces = int(msg.split(' ', 1)[0]) * ' '
+            msg = msg.split(' ', 1)[1].strip()
+        else:
+            spaces = ' '
+        spaced_message = spaces.join(list(msg))
+        await ctx.send(spaced_message)
+        
+    
+    @commands.command(pass_context=True)
+    async def textflip(self, ctx, *, msg):
+        """Flip given text."""
+        result = ""
+        for char in msg:
+            if char in self.text_flip:
+                result += self.text_flip[char]
+            else:
+                result += char
+        await ctx.send(result[::-1])  # slice reverses the string
 
 
 
